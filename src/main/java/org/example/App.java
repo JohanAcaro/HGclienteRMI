@@ -16,42 +16,53 @@ public class App
 {
     public static void main( String[] args )
     {
+        // Declara el registro de objetos remotos y el lector de teclado
         Registry registry;
         var lector = new Scanner(System.in);
         try {
-            registry = LocateRegistry.getRegistry("192.168.56.1", 5055);
+            // Obtiene el registro del host y puerto indicados
+            registry = LocateRegistry.getRegistry("192.168.1.42", 5055);
             System.out.println("Hemos obtenido el registro");
+            // Obtiene el objeto remoto
             JuegoDeTronosInterfaceRMI juegoTronos = (JuegoDeTronosInterfaceRMI) registry.lookup("misPersonajes");
             System.out.println("Hemos obtenido el objeto remoto");
             System.out.println(); // Retorno de carro.
+            // Declara las variables necesarias
             String buscado;
             String opcion;
             // Login
             login(lector, juegoTronos);
 
             do {
+                // Muestra el menú
                 escribirMenu();
                 opcion = lector.nextLine().toUpperCase();
+                // Ejecuta la opción elegida
                 switch (opcion) {
                     case "A" -> {
+                        // Muestra todos los personajes
                         System.out.println("Personajes");
                         System.out.println(juegoTronos.allPersonajes());
                     }
                     case "B" -> {
+                        // Muestra todas las casas
                         System.out.println("Casas");
                         System.out.println(juegoTronos.allCasas());
                     }
                     case "C" -> {
+                        // Busca un personaje
                         System.out.println("Escribe el nombre del personaje: ");
                         buscado = lector.nextLine();
                         System.out.println(juegoTronos.buscarPersonaje(buscado));
                     }
                     case "D" -> {
+                        // Busca una casa
                         System.out.println("Escribe el nombre de la casa: ");
                         buscado = lector.nextLine();
                         System.out.println(juegoTronos.buscarCasa(buscado));
                     }
                     case "E" -> {
+                        // Busca los personajes de una casa
                         System.out.println("Escribe el nombre de la casa de los personajes: ");
                         buscado = lector.nextLine();
                         System.out.println(juegoTronos.buscarPersonajesCasa(buscado));
@@ -62,22 +73,28 @@ public class App
                 }
             } while (!opcion.equals("F"));
         } catch (RemoteException | NotBoundException e) {
+            // Si hay algún error, lo muesro por pantalla
             System.out.println(e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        // Cierra el lector de teclado
         lector.close();
     }
 
     private static void login(Scanner lector, JuegoDeTronosInterfaceRMI juegoTronos) {
+        // Declara las variables necesarias
         String usuario;
         String password;
         boolean loginCorrecto = false;
+        // Bucle del login hasta que sea correcto
         do {
+            // Pide el usuario y la contraseña
             System.out.println("Introduce el usuario: ");
             usuario = lector.nextLine();
             System.out.println("Introduce la contraseña: ");
             password = lector.nextLine();
+            // Comprueba si el usuario y la contraseña son correctos
             try {
                 loginCorrecto = juegoTronos.iniciarSesion(usuario, password);
             } catch (RemoteException e) {
@@ -85,6 +102,7 @@ public class App
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+            // Muestra el mensaje de bienvenida o de error
             if (loginCorrecto) {
                 System.out.println("Bienvenido " + usuario);
             } else {
@@ -95,6 +113,7 @@ public class App
     }
 
     private static void escribirMenu() {
+        // Menú de opciones
         System.out.println("Búsqueda Juego de Tronos");
         System.out.println("--------------------------");
         System.out.println("A = Todos Personajes");
