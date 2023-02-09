@@ -16,7 +16,7 @@ public class App
         var lector = new Scanner(System.in);
         try {
             // Obtiene el registro del host y puerto indicados
-            registry = LocateRegistry.getRegistry("192.168.1.42", 5055);
+            registry = LocateRegistry.getRegistry("192.168.56.1", 5055);
             System.out.println("Hemos obtenido el registro");
             // Obtiene el objeto remoto
             JuegoDeTronosInterfaceRMI juegoTronos = (JuegoDeTronosInterfaceRMI) registry.lookup("misPersonajes");
@@ -36,30 +36,33 @@ public class App
                 switch (opcion) {
                     case "A" -> {
                         // Muestra todos los personajes
-                        System.out.println("Personajes");
+                        System.out.println("\nPersonajes");
                         System.out.println(juegoTronos.allPersonajes());
                     }
                     case "B" -> {
                         // Muestra todas las casas
-                        System.out.println("Casas");
+                        System.out.println("\nCasas");
                         System.out.println(juegoTronos.allCasas());
                     }
                     case "C" -> {
                         // Busca un personaje
                         System.out.println("Escribe el nombre del personaje: ");
                         buscado = lector.nextLine();
+                        System.out.println("\nPersonaje");
                         System.out.println(juegoTronos.buscarPersonaje(buscado));
                     }
                     case "D" -> {
                         // Busca una casa
                         System.out.println("Escribe el nombre de la casa: ");
                         buscado = lector.nextLine();
+                        System.out.println("\nCasa");
                         System.out.println(juegoTronos.buscarCasa(buscado));
                     }
                     case "E" -> {
                         // Busca los personajes de una casa
                         System.out.println("Escribe el nombre de la casa de los personajes: ");
                         buscado = lector.nextLine();
+                        System.out.println("\nPersonajes de la casa " + buscado);
                         System.out.println(juegoTronos.buscarPersonajesCasa(buscado));
                     }
                     case "F" -> System.out.println("Programa finalizado");
